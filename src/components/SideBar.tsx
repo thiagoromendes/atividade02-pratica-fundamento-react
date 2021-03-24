@@ -4,14 +4,19 @@ import { api } from '../services/api';
 
 import '../styles/sidebar.scss';
 
+interface SelectedGenreIdProps{
+  selectedId: (id:number) => void;
+  selectedGenreId: number
+}
+
 interface GenreResponseProps {
   id: number;
   name: 'action' | 'comedy' | 'documentary' | 'drama' | 'horror' | 'family';
   title: string;
 }
 
-export function SideBar({ id: selectedId }:GenreResponseProps) { 
-  const [selectedGenreId, setSelectedGenreId] = useState(1);
+export function SideBar({selectedId, selectedGenreId}:SelectedGenreIdProps) { 
+  
   const [genres, setGenres] = useState<GenreResponseProps[]>([]);
 
   useEffect(() => {
@@ -19,12 +24,7 @@ export function SideBar({ id: selectedId }:GenreResponseProps) {
       setGenres(response.data);
     });
   }, []);
-
-  function handleClickButton(id: number) {
-    setSelectedGenreId(id);
-    selectedId = selectedGenreId;
-  } 
-
+  
   return (
     <nav className="sidebar">
         <span>Watch<p>Me</p></span>
@@ -35,7 +35,7 @@ export function SideBar({ id: selectedId }:GenreResponseProps) {
               key={String(genre.id)}
               title={genre.title}
               iconName={genre.name}
-              onClick={() => handleClickButton(genre.id)}
+              onClick={() => selectedId(genre.id)}
               selected={selectedGenreId === genre.id}
             />
           ))}

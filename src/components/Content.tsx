@@ -4,8 +4,8 @@ import { api } from '../services/api';
 
 import '../styles/content.scss';
 
-interface SelectedGenreIdProps {
-  id: number
+interface SelectedGenreIdProps{
+  selectedGenreId: number;
 }
 
 interface GenreResponseProps {
@@ -25,19 +25,19 @@ interface MovieProps {
   Runtime: string;
 }
 
-export function Content(props:SelectedGenreIdProps) {
+export function Content({ selectedGenreId } : SelectedGenreIdProps) {
   const [movies, setMovies] = useState<MovieProps[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<GenreResponseProps>({} as GenreResponseProps);
 
   useEffect(() => {
-    api.get<MovieProps[]>(`movies/?Genre_id=${props.id}`).then(response => {
+    api.get<MovieProps[]>(`movies/?Genre_id=${selectedGenreId}`).then(response => {
       setMovies(response.data);
     });
 
-    api.get<GenreResponseProps>(`genres/${props.id}`).then(response => {
+    api.get<GenreResponseProps>(`genres/${selectedGenreId}`).then(response => {
       setSelectedGenre(response.data);
     })
-  }, [props.id]);
+  }, [selectedGenreId]);
 
   return(
     <div className="container">
